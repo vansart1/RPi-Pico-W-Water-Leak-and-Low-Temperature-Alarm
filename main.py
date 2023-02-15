@@ -1,9 +1,9 @@
 import network
-import ntpclient
 import time
-import config
 from machine import ADC, Pin
-
+import ntpclient
+import utwilio
+import config
 
 
 #set up variables
@@ -28,6 +28,8 @@ wlan.active(True)
 wlan.disconnect()
 time.sleep(0.2)
 
+#set up twilio
+twilio_client = utwilio.rest.Client(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
 
 #functions
 def send_alert(message, last_alert_time):
@@ -36,6 +38,7 @@ def send_alert(message, last_alert_time):
     print(f"Time since last alert is {time_since_last_alert} seconds")
     if time_since_last_alert > config.ALERT_TIME_INTERVAL:
         print(f"Sending alert message: {message}")
+        twilio_client.messages.create(config.TWILIO_TO, config.TWILIO_FROM, message)
     
     return current_time
 
@@ -51,6 +54,9 @@ while True:
         while not wlan.isconnected():
             time.sleep(0.5)
 
+        print(f"Connected to Wi-Fi SSID: {config.WIFI_SSID}")
+        print('network config:', wlan.ifconfig())
+
         #get & set time from NTP server
         try:
             ntpclient.settime()
@@ -59,7 +65,6 @@ while True:
             led.value(1)
             time.sleep(10)
 
-        print(f"Connected to Wi-Fi SSID: {config.WIFI_SSID}")
         
         #blink LED and sound chirp to show wifi is configured
         led.value(1)
