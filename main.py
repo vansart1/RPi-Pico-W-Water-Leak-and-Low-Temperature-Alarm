@@ -7,9 +7,9 @@ import config
 
 
 #set up variables
-led = Pin("LED", Pin.OUT)
+led = Pin(8, Pin.OUT)
 alarm = Pin(2, Pin.OUT)
-test_button = Pin(3, Pin.IN)
+test_button = Pin(4, Pin.IN)
 moisture_sensor = ADC(0)
 temp_sensor = ADC(4)
 
@@ -36,7 +36,7 @@ def send_alert(message, last_alert_time):
     current_time = time.time()
     time_since_last_alert = current_time - last_alert_time
     print(f"Time since last alert is {time_since_last_alert} seconds")
-    if time_since_last_alert > config.ALERT_TIME_INTERVAL:
+    if time_since_last_alert > ( config.ALERT_TIME_INTERVAL * 60 ):
         print(f"Sending alert message: {message}")
         twilio_client.messages.create(config.TWILIO_TO, config.TWILIO_FROM, message)
     
@@ -49,6 +49,7 @@ while True:
     if not wlan.isconnected():
 
         print(f"Connecting to Wi-Fi SSID: {config.WIFI_SSID}")
+        #wlan.hostname("helo.local")
         wlan.connect(config.WIFI_SSID, config.WIFI_PASSWORD)
 
         while not wlan.isconnected():
@@ -69,7 +70,7 @@ while True:
         #blink LED and sound chirp to show wifi is configured
         led.value(1)
         alarm.value(1)
-        time.sleep(.2)
+        time.sleep(0.1)
         led.value(0)
         alarm.value(0)
 
@@ -107,8 +108,13 @@ while True:
         led.value(0)
         alarm.value(0)
    
-    print(time.time())    
-    time.sleep(3)
+    print(time.time())
+    
+    led.value(1)
+    time.sleep(.05)
+    led.value(0)
+        
+    time.sleep(2)
 #------------ main program loop end ---------------------
     
     

@@ -12,16 +12,16 @@ TWILIO_ACCOUNT_SID = "TWILIO ACCOUNT SID"
 TWILIO_AUTH_TOKEN = "TWILIO AUTH TOKEN"
 
 #Twilio phone numbers you will be receiving alerts from (set up on Twilio.com)
-TWILIO_FROM = "+12039901175"
+TWILIO_FROM = "+15555555555"
 
 #Phone number to send alerts to (must be verified on Twilio.com)
-TWILIO_TO = "+12039694938"
+TWILIO_TO = "+15555555555"
 
-#How many seconds to wait before another text alert is sent
-ALERT_TIME_INTERVAL = 20
+#How many minutes to wait before another text alert is sent
+ALERT_TIME_INTERVAL = 60
 
 #Moisture level on a 0-100 scale above which an audible alarm and text alert should be triggered
-MOISTURE_ALARM_THRESHOLD = 10
+MOISTURE_ALARM_THRESHOLD = 5
 
 #Temperature in Farenheigh below which a text alert should be triggered
-COLD_ALERT_THRESHOLD = 77
+COLD_ALERT_THRESHOLD = 50
